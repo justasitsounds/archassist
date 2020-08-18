@@ -1,0 +1,52 @@
+@startuml
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+/' uncomment the AWSSimplified include if you want the simplified diagram view '/
+!define AWSPuml /include
+!include AWSPuml/AWSCommon.puml
+' !include AWSPuml/AWSSimplified.puml
+{{ range .Services | unique }}!include AWSPuml/{{.IncludePath}}/{{.Name}}.puml
+{{ end }}
+
+'override the common rectangle for services - make borderColor transparent (remove shadowing)
+skinparam rectangle{{ range .Services | unique }}{{ if notVPC .Name }}<<{{.Name}}>>{{ end }}{{ end }}{
+    BorderColor transparent
+    Shadowing false
+}
+
+
+left to right direction
+'top to bottom direction
+
+title {{ .Title }}
+
+AWSCloud(aws,"AWS", ""){
+{{ range .Services }}    {{.Name}}({{ toLower .Identifier }}, "{{.Description}}", "")
+{{ end }}
+}
+
+/'
+USAGE HINTS
+valid connector lines:
+    -->
+    ..>
+    ~~>
+
+Direction hints (Not very intuitive)
+    -up->
+    -right->
+    -down->
+    -left->
+
+Annotations:
+
+A --> B : add annotation to arrow
+
+note left : inline note
+
+note right of A
+end note
+
+'/
+@enduml
